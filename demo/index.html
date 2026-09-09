@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QR code generator — NAS Digital</title>
+    <meta
+      name="description"
+      content="Make a QR code in your browser — download it as SVG or PNG, or generate a WiFi join code. The text never leaves your device, so nothing can log where your codes point."
+    />
+    <link rel="stylesheet" href="demo.css" />
+    <link rel="stylesheet" href="../dist/qr-code-generator.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "QR code generator",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any browser",
+        "description": "Generate a QR code entirely in the browser and download it as a scalable SVG or a PNG, including WiFi join codes. Nothing is sent to a server, so nothing can log or track where the codes point.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+        "featureList": [
+          "Downloads as real scalable SVG, or PNG",
+          "WiFi join codes a phone recognises",
+          "Warns when a colour pair will not scan",
+          "Chooses the error-correction level and reports the one actually used",
+          "Runs entirely in the browser with no upload"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <main class="wrap">
+      <p class="eyebrow">Free tool</p>
+      <h1>QR code generator</h1>
+      <p class="lede">
+        Type a link, get a code, download it as an SVG a printer will be happy with. Nothing is sent
+        anywhere — which matters more here than it sounds, because plenty of free QR sites are
+        server-side and can see, log and in some cases track every code you make.
+      </p>
+
+      <noscript>
+        <p class="qr-warning">
+          This one builds the code in your browser, so it needs JavaScript switched on. Nothing is
+          uploaded either way.
+        </p>
+      </noscript>
+
+      <section class="qr glass" data-qr style="padding: clamp(1rem, 4vw, 2rem); border-radius: 16px">
+        <div class="qr-layout">
+          <div>
+            <div class="qr-modes">
+              <button type="button" class="qr-mode" data-qr-mode="text" aria-pressed="true">
+                Link or text
+              </button>
+              <button type="button" class="qr-mode" data-qr-mode="wifi" aria-pressed="false">
+                WiFi
+              </button>
+            </div>
+
+            <div class="qr-panel" data-qr-panel="text">
+              <label class="qr-field">
+                <span>Link or text</span>
+                <textarea data-qr-text spellcheck="false">https://nasdigital.co.uk</textarea>
+              </label>
+            </div>
+
+            <div class="qr-panel" data-qr-panel="wifi" hidden>
+              <label class="qr-field">
+                <span>Network name (SSID)</span>
+                <input type="text" data-qr-ssid spellcheck="false" />
+              </label>
+              <label class="qr-field">
+                <span>Password</span>
+                <input type="text" data-qr-password spellcheck="false" />
+              </label>
+              <label class="qr-field">
+                <span>Security</span>
+                <select data-qr-auth>
+                  <option value="WPA">WPA / WPA2 / WPA3</option>
+                  <option value="WEP">WEP (old)</option>
+                  <option value="nopass">Open, no password</option>
+                </select>
+              </label>
+              <label class="qr-check">
+                <input type="checkbox" data-qr-hidden />
+                <span>Hidden network</span>
+              </label>
+            </div>
+
+            <div class="qr-options">
+              <label class="qr-field">
+                <span>Error correction</span>
+                <select data-qr-ecc>
+                  <option value="L">L — smallest</option>
+                  <option value="M" selected>M — balanced</option>
+                  <option value="Q">Q — tougher</option>
+                  <option value="H">H — survives damage</option>
+                </select>
+              </label>
+              <label class="qr-field">
+                <span>Size</span>
+                <select data-qr-size>
+                  <option value="4">Small</option>
+                  <option value="8" selected>Medium</option>
+                  <option value="16">Large</option>
+                  <option value="32">Print</option>
+                </select>
+              </label>
+              <span class="qr-field">
+                <span>Foreground</span>
+                <span class="qr-swatch">
+                  <input type="color" value="#000000" data-qr-fg aria-label="Foreground colour" />
+                </span>
+              </span>
+              <span class="qr-field">
+                <span>Background</span>
+                <span class="qr-swatch">
+                  <input type="color" value="#ffffff" data-qr-bg aria-label="Background colour" />
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <div class="qr-stage">
+            <div class="qr-preview" data-qr-preview></div>
+            <p class="qr-meta" data-qr-meta></p>
+            <div class="qr-downloads">
+              <button type="button" class="qr-btn" data-qr-download-svg>Download SVG</button>
+              <button type="button" class="qr-btn" data-qr-download-png>Download PNG</button>
+              <button type="button" class="qr-btn" data-qr-copy>Copy SVG</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="qr-warning" data-qr-warning></p>
+        <p class="qr-status" data-qr-status role="status"></p>
+      </section>
+
+      <h2>Why in your browser rather than on a server</h2>
+      <p>
+        A QR code is a link, and a link says something about you — where your shop is, what your WiFi
+        password is, which document you are handing round. Plenty of free generators build the code
+        server-side, which means the URL passes through somebody else's machine, and a documented
+        few of them quietly redirect through a tracking domain so they can count the scans. This one
+        never sends the text anywhere, because it never needs to.
+      </p>
+
+      <h2>Two things that stop a code scanning</h2>
+      <p>
+        The obvious one is contrast. The less obvious one, and the reason a code can look perfect and
+        still fail, is <strong>inversion</strong>: light modules on a dark background. Many scanners
+        only ever look for dark-on-light and never try it the other way round, so a white-on-black
+        code fails on a good share of phones despite having the strongest contrast there is. Both are
+        checked, and the warning says which one it is.
+      </p>
+      <p>
+        The third is the quiet zone — the empty margin. It is four modules wide, it is part of the
+        specification rather than styling, and it is not adjustable here, because a code with the
+        margin trimmed off looks tidier and does not work.
+      </p>
+
+      <h2>The error-correction level you pick is a minimum</h2>
+      <p>
+        Higher error correction lets a code survive dirt, creases and a logo placed over it, at the
+        cost of a denser pattern. The library will quietly raise the level when there is spare room
+        without making the code any bigger — so the figure under the preview is the level actually
+        used, which is sometimes higher than the one you chose. Reporting what you asked for would
+        just be wrong.
+      </p>
+
+      <h2>SVG for anything printed</h2>
+      <p>
+        The SVG is real vector geometry — one path, integer coordinates, no embedded image — so it
+        scales to a shop window or a business card with no loss. The PNG is drawn module by module at
+        whichever size you pick, rather than by scaling a picture, so its edges stay sharp.
+      </p>
+    </main>
+
+    <script src="../dist/qr-code-generator.js" defer></script>
+  </body>
+</html>
